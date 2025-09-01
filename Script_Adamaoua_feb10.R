@@ -16,10 +16,6 @@ set.seed(3)
 path = "/Users/amymann/Documents/Malaria Modeling/R/fits/"
 setwd(path)
 
-regions <- c("Nord", "Littoral", "Sud", "Ouest", "NordOuest", "SudOuest", "Est")
-
-TotalPop = 1309666
-
 beta_h = 0.022  #0.04; #
 beta_v = 0.48  #0.09; #
 mu_h = 1/(60.3*12)  # 0.000056 #
@@ -27,17 +23,33 @@ mu_v = 0.033*30   #1/(15/30)  15 days
 sigma_h  = 0.1*30  # 1/(7/30) #14 days  # rate of transition from exposed to symptomatic infectious
 gamma_h = 0.0035*30 # 1/(7/30)   15 days    # recovery rate
 
-L_h_list <- c(10327,  # Centre      (Central)
-              3080, # Adamaoua 
-              8806,   # Nord        (North)
-              8352,   # Littoral    (Littoral)
-              1067,   # Sud         (South)
-              1968,   # Ouest       (West)
-              2570,   # NordOuest   (North-West)
-              3294,   # SudOuest    (South-West)
-              2171)   # Est         (East)
-names(L_h_list) <- regions          # do this once, after creating L_h
-regions <- c( "Centre", "Adamaoua", "Nord", "Littoral", "Sud", "Ouest", "NordOuest", "SudOuest", "Est")
+L_h_list <- c(Centre = 10327,  # Centre      (Central)
+              Adamaoua = 3080, # Adamaoua 
+              ExtremeNord= 11885, #ExtremeNord 
+              Nord = 8806,   # Nord        (North)
+              Littoral = 8352,   # Littoral    (Littoral)
+              Sud = 1067, 
+              Ouest= 1968,   # Ouest       (West)
+              NordOuest= 2570,   # NordOuest   (North-West)
+              SudOuest= 3294,   # SudOuest    (South-West)
+              Est= 2171)   # Est         (East)
+
+
+TotalPop_list <- c(
+  Centre     = 4723372,  # Central (Centre)
+  Adamaoua   = 1309666,  # Adamawa (Adamaoua)
+  Est        = 1120567,  # East (Est)
+  ExtremeNord= 4595669,  # Far North (Extreme-Nord)
+  Littoral   = 3887698,  # Littoral
+  Nord       = 2856872,  # North (Nord)
+  NordOuest  = 2246302,  # Northwest (Nord-Ouest)
+  Ouest      = 2089297,  # West (Ouest)
+  Sud        = 805741,   # South (Sud)
+  SudOuest   = 1857169   # Southwest (Sud Ouest)
+)
+
+
+regions <- c( "Centre", "Adamaoua", "ExtremeNord", "Nord", "Littoral", "Sud", "Ouest", "NordOuest", "SudOuest", "Est")
 # regions <- c("Adamaoua", "Centre", "Nord")
 names(L_h_list) <- regions 
 n_months = 12
@@ -52,6 +64,7 @@ data_path = here("RegionalData/")
 #convert <- rep(273.15, 36)
 #temp <- temp1[50,50,]-rep(273.15, 36)
 for (region in regions) {
+  TotalPop <- TotalPop_list[[region]]
   Raw_Cases = read.csv(paste(data_path, "Region ", region,".csv", sep="") )  
 L_h <- L_h_list[region]
 temp1 <- read_csv(paste(data_path, "Cameroon_", region, "_daily.csv", sep=""), skip=10, col_names = c("YEAR", "MO", "DY", "T2M"))
