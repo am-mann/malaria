@@ -44,8 +44,7 @@ n_months = 12
 nmonths = n_months
 
 # Organizing the cases data by region
-data_path = "/Users/amymann/Documents/Malaria Modeling/R/fits/RegionalData/"
-data_path2 = "/Users/amymann/Documents/Malaria Modeling/MATLAB/malaria/"
+data_path = here("RegionalData/")
 #ncfname <- paste(data_path2, "cameroon_Adamaoua_monthly", ".nc", sep="")
 #dname <- "t2m" 
 #ncin <- nc_open(ncfname)
@@ -169,9 +168,9 @@ MalariaModel_Full <- stan_model(paste(path, "Adamaoua-feb10.stan", sep="") )
 # fit_seir <- sampling(MalariaModel_Full, data = data_seir, iter = 100, chains = 1)
 
  ################### saving stan object ###################
- path = "/Users/amymann/Documents/Malaria Modeling/R/fits/"
- saveRDS(fit_seir, file="StanOutput_Adamaoua.RDS")
- fit_sir_negbin <- readRDS("StanOutput_Adamaoua.RDS")
+ path = here()
+ saveRDS(fit_seir, file = file.path(fit_out_dir, paste0("StanOutput_", region, ".RDS")))
+ fit_sir_negbin <- readRDS(file.path(fit_out_dir, paste0("StanOutput_", region, ".RDS")))
  
  # saving the sampling output
  # Extracting the posteriors  from the output of the sampling and saving it in a file

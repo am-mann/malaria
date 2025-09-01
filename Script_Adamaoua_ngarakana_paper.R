@@ -7,11 +7,17 @@ library("tidybayes")
 library(matrixStats)
 library("loo")
 library(ncdf4)
+library(here)
 options(mc.cores = parallel::detectCores())
 
 
-path = "/Users/amymann/Documents/Malaria Modeling/R/fits/"
-setwd(path)
+# Project root and output dir (use "2-param-fit" if this script is for the 2-param version)
+root_dir   <- here::here()
+fit_out_dir <- here("4-param-fit")
+dir.create(fit_out_dir, recursive = TRUE, showWarnings = FALSE)
+
+# Keep other outputs (CSV/PNG) alongside the RDS files
+path <- fit_out_dir
 
 
 TotalPop = 1309666
@@ -52,11 +58,10 @@ names(L_h_list) <- regions
 for (region in regions) {
   L_h <- L_h_list[region]
   # Organizing the cases data by region
-  data_path = "/Users/amymann/Documents/Malaria Modeling/R/fits/RegionalData/"
-  data_path2 = "/Users/amymann/Documents/Malaria Modeling/MATLAB/malaria/"
-  Raw_Cases = read.csv(paste(data_path, "Region ", region,".csv", sep="") )  
+  data_path  <- here("RegionalData")
+  Raw_Cases = read.csv(paste(data_path, "/Region ", region,".csv", sep="") )  
   
-temp1 <- read_csv(paste(data_path, "Cameroon_", region, "_daily.csv", sep=""), skip=10, col_names = c("YEAR", "MO", "DY", "T2M"))
+temp1 <- read_csv(paste(data_path, "/Cameroon_", region, "_daily.csv", sep=""), skip=10, col_names = c("YEAR", "MO", "DY", "T2M"))
 
 # Combine YEAR, MO, and DY into a single date column
 temp2 <- temp1 %>%
@@ -170,7 +175,7 @@ data_seir = list(
 	y0_vars = y0_vars
 )
 
-MalariaModel_Full <- stan_model("/Users/amymann/Documents/Malaria Modeling/R/fits/Adamaoua.stan")
+MalariaModel_Full <- stan_model(here("Adamaoua.stan"))
 
 # fit_seir <- sampling(AgeModel_Full,data = data_seir, iter = 5, init = function() inti_cond(data_seir),  chains = 4)
 # fit_seir <- sampling(MalariaModel_Full, data = data_seir, iter = 100,  chains = 4)
@@ -183,9 +188,10 @@ MalariaModel_Full <- stan_model("/Users/amymann/Documents/Malaria Modeling/R/fit
 # fit_seir <- sampling(MalariaModel_Full, data = data_seir, iter = 100, chains = 1)
 
  ################### saving stan object ###################
- path = "/Users/amymann/Documents/Malaria Modeling/R/fits/"
- saveRDS(fit_seir, file="StanOutput_Adamaoua.RDS")
- fit_sir_negbin <- readRDS("StanOutput_Adamaoua.RDS")
+ path = here()
+ saveRDS(fit_seir, file = file.path(fit_out_dir, paste0("StanOutput_", region, ".RDS")))
+ fit_sir_negbin <- readRDS(file.path(fit_out_dir, paste0("StanOutput_", region, ".RDS")))
+
  
  # saving the sampling output
  # Extracting the posteriors  from the output of the sampling and saving it in a file
@@ -197,8 +203,7 @@ MalariaModel_Full <- stan_model("/Users/amymann/Documents/Malaria Modeling/R/fit
  
  # parameters for the prior for phi 
  Post <- read.table(file= paste(path, "Par_PostDist_", region, ".csv", sep="") )
- 
- 
+
  
  
  # checking inference
