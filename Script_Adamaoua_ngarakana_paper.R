@@ -13,7 +13,7 @@ options(mc.cores = parallel::detectCores())
 
 # Project root and output dir (use "2-param-fit" if this script is for the 2-param version)
 root_dir   <- here::here()
-fit_out_dir <- here("4-param-fit")
+fit_out_dir <- here("2-param-fit")
 dir.create(fit_out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Keep other outputs (CSV/PNG) alongside the RDS files
@@ -197,7 +197,7 @@ MalariaModel_Full <- stan_model(here("Adamaoua.stan"))
 # fit_seir <- sampling(MalariaModel_Full, data = data_seir, iter = 100, chains = 1)
 
  ################### saving stan object ###################
- path = here()
+ path = fit_out_dir
  saveRDS(fit_seir, file = file.path(fit_out_dir, paste0("StanOutput_", region, ".RDS")))
  fit_sir_negbin <- readRDS(file.path(fit_out_dir, paste0("StanOutput_", region, ".RDS")))
 
