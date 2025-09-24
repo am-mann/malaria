@@ -1,3 +1,5 @@
+# Temperature driven model of the seasonality of malaria in Cameroon
+
 This code provides a temperature dependent model of malaria transmission in Cameroon. There are many thermal curves and biological constants used which assume the primary vector is Anopheles gambiae. 
 
 This model can be used for other regions but biological constants will need to changed depending on the vector in the region. The thermal curves and constants mostly come from the Mordecai, 2019 paper. 
