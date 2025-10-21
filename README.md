@@ -5,4 +5,4 @@ This code creates a temperature driven model of malaria transmission and tests i
 This model does not incorporate rainfall. This assumption is fine as long as the region being modelled gets sufficient rainfall to allow mosquito survival. Likewise, there are other extreme climatic and environmental conditions 
 that might prevent the transmission of malaria. This model is also not suitable in those cases.
 
-Feel free to use and adapt this model as you would like, but of course give credit.
+Feel free to use and adapt this model as you would like.
